@@ -41,7 +41,8 @@ class MenuInterface(ExternalInterface):
                 self.__controls.run()
             elif key == 'continue' or key == 'start':
                 return key
-                
+            
+            self.setKey(None)
             self.setButtonPressed()
 
     def draw(self):

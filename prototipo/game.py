@@ -10,9 +10,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.__interfaceController = InterfaceController()
         self.__actualInterface = self.__interfaceController.firstInterface()
-        self.__pressed_time = 60
-        self.__button_pressed = False
-        self.__change_interface = False
+        self.__nextInterface = None
+        self.__key = None
         self.start()
         
     def start(self):
@@ -21,23 +20,19 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            
-            key = self.__actualInterface.run()
-            
-            if key != None:
-                self.__actualInterface = self.__interfaceController.nextInterface(key)
 
-            self.clock.tick(FPS)
-            self.cooldownBottonPressed()
+                        
+            key = self.__actualInterface.run()
+                
+            if key != None:
+                self.__nextInterface = self.__interfaceController.nextInterface(key)
+
+            if (not pygame.mouse.get_pressed()[0]) and (self.__nextInterface != None):
+                self.__actualInterface = self.__nextInterface
+            
+            
+            self.clock.tick(FPS)             
             pygame.display.flip()
-    
-    def cooldownBottonPressed(self):
-        current_time = pygame.time.get_ticks()
-        if self.__button_pressed:
-            if current_time - self.__pressed_time > self.__pressed_time:
-                self.__change_interface = True
-        else:
-            self.__change_interface = False
                 
 game = Game()
 
