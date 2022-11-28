@@ -1,16 +1,15 @@
 import pygame, sys
 
 from settings import WIDTH, HEIGTH, FPS
-from ingame import InGame
-from interfaces.menuInterface import MenuInterface
-from interfaces.gameoverInterface import GameOverInterface
+from interfaceController import InterfaceController
 
-class InterfaceController:
+class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
         self.clock = pygame.time.Clock()
-        self.__actualInterface = MenuInterface()
+        self.__interfaceController = InterfaceController()
+        self.__actualInterface = self.__interfaceController.firstInterface()
         self.__pressed_time = 60
         self.__button_pressed = False
         self.__change_interface = False
@@ -26,12 +25,7 @@ class InterfaceController:
             key = self.__actualInterface.run()
             
             if key != None:
-                if key == 'mainmenu':
-                    self.__actualInterface = MenuInterface()
-                elif key == 'start' or key == 'continue' or key == 'restart':
-                    self.__actualInterface = InGame()
-                elif key == 'morreu':
-                    self.__actualInterface = GameOverInterface()
+                self.__actualInterface = self.__interfaceController.nextInterface(key)
 
             self.clock.tick(FPS)
             self.cooldownBottonPressed()
@@ -45,5 +39,5 @@ class InterfaceController:
         else:
             self.__change_interface = False
                 
-game = InterfaceController()
+game = Game()
 
